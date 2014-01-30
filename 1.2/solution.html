@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+
+<html >
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <style>
+        .icon-user-male {
+            background-color: lightblue;
+        }
+
+        .icon-user-female {
+            background-color: pink;
+        }
+
+        .icon-user-default {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <p>
+            <input type="text" data-bind="value: name, cssForGender: gender" />
+        </p>
+    </div>
+
+
+    <script>
+
+        // move all css-related logic into binding handlers 
+        // bonus points: change your CSS class names to be more semantic ("male", "female", "unknown")
+        // and simply bind directly to semantic meaning e.g. data-bind="css: gender"
+
+        ko.bindingHandlers.cssForGender = {
+            update: function (element, valueAccessor) {
+                var currentGender = ko.unwrap(valueAccessor()),
+                    $el = $(element),
+                    cssClasses = {
+                        "male": "icon-user-male",
+                        "female": "icon-user-female",
+                        "unknown": "icon-user-default"
+                    };
+
+                $.each(cssClasses, function (key, value) {
+                    $el.removeClass(value);
+                })
+
+                $el.addClass(cssClasses[currentGender] || cssClasses.unknown);
+            }
+        };
+
+
+        function ViewModel() {
+            var self = this,
+                maleNames = ["joe", "bob"],
+                femaleNames = ["julie", "anna"];
+
+            self.name = ko.observable("Joe");
+
+            self.gender = ko.computed(function () {
+                if ($.inArray(self.name().toLowerCase(), maleNames) >= 0) {
+                    return "male";
+                }
+                if ($.inArray(self.name().toLowerCase(), femaleNames) >= 0) {
+                    return "female";
+                }
+                return "unknown";
+            });
+        }
+
+        $(document).on("ready", function () {
+            ko.applyBindings(new ViewModel(), $("#app")[0]);
+        });
+    </script>
+
+</body>
+</html>

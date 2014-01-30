@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html >
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+
+</head>
+<body>
+
+    <div id="app" >
+
+        Name: <input type="text" data-bind="value: name" />
+
+    </div>
+
+    <script>
+
+        function ViewModel() {
+            var self = this;
+            self.name = ko.observable("Joe");
+
+            // using a subscription to sanitize input
+            self.name.subscribe(function (newName) {
+                console.log("name changed to: " + newName);
+                if (newName.length) {
+                    self.name(newName.charAt(0).toUpperCase() + newName.slice(1));
+                }
+            });
+        }
+
+        $(document).on("ready", function () {
+            
+            var vm = new ViewModel();
+            ko.applyBindings(vm, $("#app")[0]);
+            
+
+        });
+    </script>
+</body>
+</html>

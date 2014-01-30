@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <style>
+        .icon-user-male {
+            background-color: lightblue;
+        }
+       .icon-user-female {
+            background-color: pink;
+        }
+        .icon-user-default {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <p>
+            <input type="text" data-bind="value: name, css: cssClass" /> 
+        </p>
+    </div>
+    
+
+    <script>
+
+        function ViewModel() {
+            var self = this,
+                maleNames = ["joe", "bob"],
+                femaleNames = ["julie", "anna"];
+
+            self.name = ko.observable("Joe");
+
+            // this computed returns CSS class names which have no domain/semantic meaning
+            self.cssClass = ko.computed(function () {
+                if ($.inArray(self.name().toLowerCase(), maleNames) >= 0) {
+                    return "icon-user-male";
+                }
+                if ($.inArray(self.name().toLowerCase(), femaleNames) >= 0) {
+                    return "icon-user-female";
+                }
+                return "icon-user-default";
+            });
+        }
+
+        $(document).on("ready", function () {
+            ko.applyBindings(new ViewModel(), $("#app")[0]);
+        });
+    </script>
+
+</body>
+</html>

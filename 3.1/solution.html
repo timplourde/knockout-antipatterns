@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+
+    <div id="app">
+
+        Name: <input type="text" data-bind="value: name" />
+
+        <button data-bind="click: greet">Greeting</button>
+
+    </div>
+
+    <script>
+
+        function ViewModel() {
+            this.name = ko.observable("Joe");
+            this.greet = function () {
+                if (name().toLowerCase().trim() === 'joe') {
+                    console.log('Hello Joe!!!');
+                } else {
+                    console.log('Who are YOU?!?!');
+                }
+            };
+        }
+
+        $(document).on("ready", function () {
+
+            var vm = new ViewModel();
+            ko.applyBindings(vm, $("#app")[0]);
+
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+
+<html >
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <script src="../lib/knockout.mapping-latest.js"></script>
+    <script src="../lib/authorData.js"></script>
+    <style>
+        .author {
+            border-bottom: 1px solid gray;
+        }
+
+        .book {
+            font-size: 9pt;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" data-bind="foreach: authors">
+        <div class="author">
+            <p>
+                <label for="authorName">Author Name:</label>
+                <input name="authorName" type="text" data-bind="value: name" />
+            </p>
+            <div data-bind="foreach: books">
+                <div class="book">
+                    <span data-bind="text: title"></span> |
+                    <span data-bind="text: ISBN"></span> |
+                    <span data-bind="text: pages"></span> pages
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        function ViewModel(authorData) {
+            var self = this;
+            self.authors = [];
+            ko.utils.arrayForEach(authorData, function (author) {
+                self.authors.push({
+                    name: ko.observable(author.name),
+                    books: author.books
+                })
+            });
+        }
+
+        $(document).on("ready", function () {
+
+            console.time("stopwatch");
+
+            var authorData = getAuthorData(100, 1000);
+            var vm = new ViewModel(authorData);
+            ko.applyBindings(vm, $("#app")[0]);
+
+            console.timeEnd("stopwatch");
+
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Knockout (Anti-)Patterns</title>
+    <link href="normalize.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+
+   <h1>Knockout (Anti-)Patterns</h1>
+
+    <div class="hippo">
+        <img src="kinghippo.jpg" alt="knockout!" />
+        <p>
+            by <a href="https://twitter.com/timplourde">@timplourde</a></p>
+    </div>
+
+    <section >
+        <h2>Introduction</h2>
+
+        <p>
+            This tutorial is heavily inspired by <a href="http://vimeo.com/73627803">this talk by Ryan Niemeyer</a>  and my own experience in building non-trivial apps with <a href="http://http://knockoutjs.com/">Knockout</a>.  It's purpose is to identify common anti-paterns in Knockout-heavy apps and suggest ways to avoid them.
+        </p>
+
+        <p>
+            Before we begin it's very important to <strong>emphasize the importance of unit testing</strong>.  If you are not unit-testing your Knockout ViewModels with something like <a href="http://qunitjs.com/">QUnit</a> or <a href="http://pivotal.github.io/jasmine/">Jasmine</a>, just stop reading.  Nothing is more vital to the long-term health of a JavaScript app than solid unit test coverage.  If you find writing unit tests difficult, come back and see if applying some of the solutions below helps with testability.</p>
+
+    </section>
+
+    <section>
+        <h2>1. Separation of Concerns</h2>
+
+        <p>Knockout is great because it does one thing very well: data binding.  After just a few hours learning Knockout, you be building complex apps and impressing your friends in no time.</p>
+
+        <p>
+            The key to making sure those fancy apps are testable and maintainable is to separate your concerns via the <a href="http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailmvvm">MVVM pattern</a>.
+            Don't worry if you don't have a PhD in MVVM.  The main thing you need to remember is <strong>the View (HTML, CSS, DOM) should not know about the ViewModel</strong>.  This simple rule will help you build testable and maintainable apps.
+        </p>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 1.1: DOM Manipulation in Knockout ViewModels
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    Once your VM has any knowledge of the DOM then it knows about your View.  This breaks MVVM, makes unit testing more cumbersome (because you need to set up / tear down DOM nodes) and results in brittle code.  With Knockout binding handlers there is really no reason to have any DOM-related code in your ViewModels.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            In this example, we want to fade in / out a message on the last name field when the first name field changes. We decided to use <span class="code">.subscribe()</span> and jQuery.
+                        </p>
+                        <a class="demo" href="1.1/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            There are several ways to solve this.  In this case we moved the fade in / out behavior to a custom binding handler.
+                        </p>
+                        <a class="demo" href="1.1/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 1.2: (Non-semantic) CSS in ViewModels
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    This is contraversial since it appears in the <a href="http://knockoutjs.com/documentation/css-binding.html">Knockout documentation</a>.  Avoid generating CSS class names from ViewModels if those class names have no semantic meaning and only exist for visual styling.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            In this example, we want use CSS to set the color of the first name text box if we know the gender.  We did this using the default CSS binding handler, binding to a computed in the ViewModel.
+                        </p>
+                        <a class="demo" href="1.2/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Since the computed was returning view-specific non-semantic CSS class names, we moved it to a custom binding handler.  It would be even simpler if you could rename the CSS class names to something more semantic like "male" and "female" and just bind directly to it without the need fo the binding handler to do the translation.
+                        </p>
+                        <a class="demo" href="1.2/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 1.3: calling ko.applyBindings() inside ViewModel code
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    ko.applyBindings() binds the ViewModel to the DOM.  You shouldn't call it from inside a ViewModel
+                    constructor function since it directly affects the DOM and should really only be run once.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            This ViewModel has a ko.applyBindings() call inside it.  This means the ViewModel is directly interacting with the View.  It also means every time you construct a ViewModel, it will re-bind, potentially resulting in extra event handlers.
+                        </p>
+                        <a class="demo" href="1.3/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Move applyBindings() into a "bootstrapper" part of your code instead.  You should also pass it a specific DOM node as the second parameter if you expect the page to evolve with more ViewModels in the future.
+                        </p>
+                        <a class="demo" href="1.3/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <section>
+        <h2>2. Going Overboard</h2>
+
+        <p>
+            Premature optimization may be the <a href="http://en.wikiquote.org/wiki/Donald_Knuth">root of all evil</a>, but be prudent in your use of knockout's powerful observables. Too many subscriptions can lead to performance issues which can be tough to refactor in large code bases.</p>
+
+        <p>For all your pedants out there, these may be more performance optimizations than patterns but if it results in better code then mission accomolished!</p>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 2.1: Making everything observable
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    Every observable has a cost.  If you're dealing with large objects or collections, make sure you are only observing things that will change.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            We have a large collection of authors and books and we're using ko.mapping() to <em>git-er-done</em>.  Everything is (unnecessarily) observable.  Check the console for the time it takes to finish loading.  If you're using chrome, <a href="https://developers.google.com/chrome-developer-tools/docs/javascript-memory-profiling#taking_a_snapshot">take a heap snapshot</a> and note the size.
+                        </p>
+                        <a class="demo" href="2.1/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Instead, just only make the necessary objects observable and get significant speed and memory gains.
+                        </p>
+                        <a class="demo" href="2.1/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 2.2: Using subscriptions for input sanitization
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    Subscribing to changes, intercepting the value and setting the value again triggers unnecessary dependency tracking.  Use extenders instead.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            We are using .subscribe() to automatically capitalize the first letter of the name.  Try entering a name with all lower-case letters.  Check your console and notice that the function gets called twice (because it's being changed twice).
+                        </p>
+                        <a class="demo" href="2.2/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Instead, use an extender to return a computed which serves as a kind of getter/setter.  Notice in your console that the function is only called once when you enter a name with all lower-case letters.
+                        </p>
+                        <a class="demo" href="2.2/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 2.3: Too much data-binding in large collections
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    Be careful not to bind DOM events for every element in an array if it's not necessary.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            We binding mouseover events for every row in the array and logging the book's title to the console.  Check the memory usage.
+                        </p>
+                        <a class="demo" href="2.3/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Instead, use the <a href="https://github.com/rniemeyer/knockout-delegatedEvents">knockout-delegatedEvents</a> plugin to leverage DOM event bubbling and see an improvement in memory usage.
+                        </p>
+                        <a class="demo" href="2.3/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 2.4: Over-evaluating computed's
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    Throttle computeds for easy performance wins.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            When rapidly deleting books, notice how many times the "calculating numBooks..." message is logged.
+                        </p>
+                        <a class="demo" href="2.4/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Just add the <span class="code">.extend({throttle: 500})</span> to debounce the evaluation of the function by 500ms.  Rapidly delete books and notice the function is called much less frequently.
+                        </p>
+                        <a class="demo" href="2.4/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <section>
+        <h2>3. Brittle HTML</h2>
+
+        <p>
+            HTML can't (easily) be unit tested, so the more logic you have in it the more brittle your application is.  
+        </p>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 3.1: Inline functions in data-bind attributes
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    Move logic into ViewModels so it can be unit-tested.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            Inline function in a click binding
+                        </p>
+                        <a class="demo" href="3.1/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Move the inline function into the ViewModel
+                        </p>
+                        <a class="demo" href="3.1/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="anti-pattern">
+            <h3 id="omg">
+                (Anti-)Pattern 3.2: Too much logic in HTML comments
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    This happens as application scope grows over time.  Try to minimize the ammount of <span class="code">ko: if</span> statements in your HTML.
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            A polymorphic collection of olymic athletes resulting in a mess of conditional logic in HTML/
+                        </p>
+                        <a class="demo" href="3.2/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Use the <span class="code">template</span> binding instead.
+                        </p>
+                        <a class="demo" href="3.2/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <script src="lib/jquery-1.10.2.min.js"></script>
+    <script>
+        $(document).on("ready", function () {
+            var $antiPatternContents = $(".anti-pattern-content");
+            $(".anti-pattern h3").on("click", function (el) {
+                var $contentEl = $($(el.target).siblings(".anti-pattern-content")[0]), 
+                    wasCurrent = $contentEl.hasClass("current");
+                $antiPatternContents.removeClass("current");
+                if (!wasCurrent) {
+                    $contentEl.addClass("current");
+                }
+            });
+        });
+    
+    </script>
+
+</body>
+
+</html>

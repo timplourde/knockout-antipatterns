@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+
+<html >
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <script src="solution.js"></script>
+ 
+</head>
+<body>
+
+    <div id="app">
+        <p>
+            <input type="text" data-bind="value: name" />
+        </p>
+    </div>
+
+
+    <script>
+        function ViewModel() {
+            this.name = ko.observable("Joe");
+        }
+        $(document).on("ready", function () {
+            ko.applyBindings(new ViewModel(), $("#app")[0]);
+        });
+    </script>
+
+</body>
+</html>

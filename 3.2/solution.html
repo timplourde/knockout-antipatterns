@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <style>
+        .athlete {
+            border-bottom: 1px solid black;
+            margin-top: 2em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Olympic Athletes</h1>
+
+    <div id="app" data-bind="foreach: athletes">
+
+        <div class="athlete">
+            <div>
+                Name : <input type="text" data-bind="value: name" />
+            </div>
+
+            <div>
+                Active : <input type="checkbox" data-bind="checked: active" />
+            </div>
+
+            <div data-bind="visible: active, template: viewMap[sport] || '', "></div>
+
+        </div>
+
+        <script id="tmpl-ice-hockey" type="text/html">
+            Goals: <input type="number" data-bind="value: goals" />
+        </script>
+
+        <script id="tmpl-speed-skating" type="text/html">
+            Best Lap:
+            <input type="text" data-bind="value: bestLap" />
+        </script>
+
+        <script id="tmpl-snowboarding" type="text/html">
+            Best Trick:
+            <select data-bind="value: bestTrick, options: SNOWBOARDING_TRICKS"></select>
+        </script>
+
+    </div>
+
+    <script>
+
+        var viewMap = {
+            "ice hockey" : "tmpl-ice-hockey",
+            "speed skating": "tmpl-speed-skating",
+            "snowboarding": "tmpl-snowboarding"
+        };
+
+        var SNOWBOARDING_TRICKS = ["Frontside Rodeo", "Double McTwist 1260", "Backside Shifty"];
+
+        function GenericAthlete(athlete) {
+            this.name = ko.observable(athlete.name);
+            this.active = ko.observable(athlete.active);
+            this.sport = athlete.sport;
+        };
+
+        function IceHockeyPlayer(athlete) {
+            ko.utils.extend(this, new GenericAthlete(athlete));
+            this.goals = ko.observable(athlete.goals);
+        };
+
+        function SpeedSkater(athlete) {
+            ko.utils.extend(this, new GenericAthlete(athlete));
+            this.bestLap = ko.observable(athlete.bestLap);
+        };
+
+        function SnowBoarder(athlete) {
+            ko.utils.extend(this, new GenericAthlete(athlete));
+            this.bestTrick = ko.observable(athlete.bestTrick);
+        };
+
+        function ViewModel(athletesData) {
+            var self = this, ctorMap = {
+                "ice hockey": IceHockeyPlayer,
+                "speed skating": SpeedSkater,
+                "snowboarding": SnowBoarder
+            };
+            this.athletes = [];
+            ko.utils.arrayForEach(athletesData, function (athlete) {
+                var athleteModel = new (ctorMap[athlete.sport] || GenericAthlete)(athlete);
+                self.athletes.push(athleteModel);
+            });
+        }
+
+        $(document).on("ready", function () {
+            var vm = new ViewModel([
+                {
+                    name: "Alex Ovechkin",
+                    sport: "ice hockey",
+                    active: true,
+                    goals: 45
+                },
+                {
+                    name: "Apollo Ono",
+                    sport: "speed skating",
+                    active: false,
+                    bestLap: 3.55
+                },
+                {
+                    name: "Shaun White",
+                    sport: "snowboarding",
+                    active: true,
+                    bestTrick: "Double McTwist 1260"
+                },
+                {
+                    name: "Joe Generic",
+                    sport: "ski jumping",
+                    active: true
+                }
+            ]);
+            ko.applyBindings(vm, $("#app")[0]);
+
+        });
+    </script>
+</body>
+
+</html>

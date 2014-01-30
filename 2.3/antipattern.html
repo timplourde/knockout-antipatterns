@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <script src="../lib/authorData.js"></script>
+    <style>
+        .author {
+            border-bottom: 1px solid gray;
+        }
+
+        .book {
+            font-size: 9pt;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" data-bind="foreach: authors">
+        <div class="author">
+            <p>
+                <label for="authorName">Author Name:</label>
+                <input name="authorName" type="text" data-bind="value: name" />
+            </p>
+            <div data-bind="foreach: books">
+                <div class="book">
+                    <span data-bind="text: title, logOnMouseOver: $data"></span> 
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        // this results a DOM event being wired to EVERY ITEM in the array
+        ko.bindingHandlers.logOnMouseOver = {
+            init: function (element, valueAccessor) {
+                $(element).on("mouseover", function () {
+                    console.log(valueAccessor().title);
+                });
+            }
+        };
+
+        function ViewModel(authorsData) {
+            this.authors = authorsData;
+        }
+
+        $(document).on("ready", function () {
+
+            var vm = new ViewModel(getAuthorData(100, 1000));
+            ko.applyBindings(vm, $("#app")[0]);
+
+
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <script src="../lib/authorData.js"></script>
+    <style>
+        .author {
+            border-bottom: 1px solid gray;
+        }
+
+        .book {
+            font-size: 9pt;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" data-bind="foreach: authors">
+
+        <div class="author">
+
+            <span data-bind="text: name"></span>
+            has
+            <span data-bind="text: numBooks"></span>
+            books with more than 50 pages
+
+            <!-- ko foreach: books -->
+
+            <div class="book">
+                <span data-bind="text: title"></span>
+                (<span data-bind="text: pages"></span> pages)
+                <button data-bind="click: $parent.removeBook">Delete</button>
+            </div>
+
+            <!-- /ko -->
+
+
+        </div>
+
+        <script>
+
+            function Author(authorData){
+                var self = this;
+                self.name = authorData.name;
+                self.books = ko.observableArray();
+                self.removeBook = function (book) {
+                    self.books.remove(book);
+                };
+                self.numBooks = ko.computed(function () {
+                    console.log("calculating numBooks...");
+                    var count = 0;
+                    ko.utils.arrayForEach(self.books(), function (book) {
+                        if (book.pages > 50) count++;
+                    })
+                    return count;
+                });
+                ko.utils.arrayForEach(authorData.books, function (book) {
+                    self.books.push(book);
+                });
+            }
+
+            function ViewModel(authorsData) {
+                var self = this;
+                self.authors = [];
+                ko.utils.arrayForEach(authorsData, function (author) {
+                    self.authors.push(new Author(author));
+                });
+            }
+
+            $(document).on("ready", function () {
+
+                var vm = new ViewModel(getAuthorData(1000, 1000));
+                ko.applyBindings(vm, $("#app")[0]);
+
+            });
+        </script>
+</body>
+
+</html>

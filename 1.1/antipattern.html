@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <style>
+        #warning {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <p>
+            <label>First Name:</label>
+            <input type="text" data-bind="value: firstName" /> 
+        </p>
+        <p>
+            <label>Last Name:</label>
+            <input id="last-name" type="text" data-bind="value: lastName" />
+            <span id="warning">&lt; -- Don't forget to fill this in!</span>
+        </p>
+    </div>
+    
+
+    <script>
+        
+        function ViewModel() {
+            this.firstName = ko.observable("Joe");
+            this.lastName = ko.observable("Smith");
+
+            this.firstName.subscribe(function () {
+                // jQuery DOM code in the ViewModel!  
+                // This breaks MVVM because the VM knows about the View (DOM).
+                $("#warning").fadeIn();
+                setTimeout(function () {
+                    $("#warning").fadeOut();
+                }, 1000);
+            });
+        }
+
+        $(document).on("ready", function () {
+            ko.applyBindings(new ViewModel(), $("#app")[0]);
+        });
+    </script>
+
+</body>
+</html>
