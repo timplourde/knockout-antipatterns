@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <style>
+        .invalid {
+            border: 1px solid red;
+        }
+
+        .row {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="app">
+
+        <div class="row" data-bind="template:{name: 'tmpl-text-field', data: streetAddress.textField}"></div>
+
+        <div class="row" data-bind="template:{name: 'tmpl-text-field', data: city.textField}"></div>
+
+
+        <script id="tmpl-text-field" type="text/html">
+            <label data-bind="text: $data.label, attr:{ for: $data.name}"></label>
+            <input type="text" data-bind="value: $data.target, valueUpdate: 'keyup',
+                                            css: {invalid: !($data).isValid()},
+                                            attr: {title: $data.tooltip, placeholder: $data.placeholder,
+                                                tabIndex: $data.tabindex, name: $data.name, id: 'txt-'+$data.name}" />
+            <span data-bind="visible: $data.required"> (required)</span>
+        </script>
+
+    </div>
+
+    <script>
+
+        function TextField(target, options) {
+            var control = {
+                target: target,
+                name : options.name,
+                label : options.label,
+                required : options.required || false,
+                placeholder : options.placeholder || "",
+                tooltip : options.tooltip || "",
+                tabindex: options.tabindex || ""
+            };
+            if (typeof options.isValid === "function") {
+                control.isValid = ko.computed(options.isValid);
+            } else {
+                control.isValid = true;
+            }
+            return control;
+        };
+
+        function ViewModel() {
+            var self = this;
+            
+            self.streetAddress = ko.observable("123 Elm St");
+            self.streetAddress.textField = new TextField(self.streetAddress, {
+                name: "streetAddress",
+                label: "Street Address",
+                required: true,
+                placeholder: "e.g. 456 Maple Ave.",
+                tooltip: "Must include the street name and house number",
+                tabindex: 4,
+                isValid: function () {
+                    return self.streetAddress().length > 3;
+                }
+            });
+           
+            self.city = ko.observable("Frederick, MD");
+            self.city.textField = new TextField(self.city, {
+                name: "city",
+                label: "City",
+                required: false,
+                placeholder: "e.g. Austin, TX",
+                tooltip: "Must include the city name and state",
+                tabindex: 5,
+                isValid: function () {
+                    return self.city().length > 5;
+                }
+            });
+
+
+        };
+        $(document).on("ready", function () {
+            var vm = new ViewModel();
+            ko.applyBindings(vm, $("#app")[0]);
+
+        });
+    </script>
+</body>
+
+</html>

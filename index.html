@@ -9,7 +9,7 @@
 </head>
 <body>
 
-   <h1>Knockout (Anti-)Patterns</h1>
+   <h1 class="title">Knockout (Anti-)Patterns</h1>
 
     <div class="hippo">
         <img src="kinghippo.jpg" alt="knockout!" />
@@ -39,7 +39,7 @@
             Don't worry if you don't have a PhD in MVVM.  The main thing you need to remember is <strong>the View (HTML, CSS, DOM) should not know about the ViewModel</strong>.  This simple rule will help you build testable and maintainable apps.
         </p>
 
-        <div class="anti-pattern">
+        <div class="anti-pattern current">
             <h3>
                 (Anti-)Pattern 1.1: DOM Manipulation in Knockout ViewModels
             </h3>
@@ -308,7 +308,7 @@
         </div>
 
         <div class="anti-pattern">
-            <h3 id="omg">
+            <h3 >
                 (Anti-)Pattern 3.2: Too much logic in HTML comments
             </h3>
             <div class="anti-pattern-content">
@@ -330,6 +330,38 @@
                             Use the <span class="code">template</span> binding instead.
                         </p>
                         <a class="demo" href="3.2/solution.html" target="_blank">View Solution</a>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="anti-pattern">
+            <h3>
+                (Anti-)Pattern 3.3: Repeated complex data-bindings
+            </h3>
+            <div class="anti-pattern-content">
+                <p>
+                    Building rich "controls" can result in a lot of repeated code if you're not careful.  
+                </p>
+
+                <div class="examples">
+
+                    <div class="example bad">
+                        <p>
+                            Multiple form fields with rich functionality have copy-pasted complex data-bind statements in the HTML.  Also notice the subtle differences in HTML between each text field.
+                        </p>
+                        <a class="demo" href="3.3/antipattern.html" target="_blank">View Anti-Pattern</a>
+                    </div>
+
+                    <div class="example good">
+                        <p>
+                            Keep your code DRY by using the <span class="code">template</span> binding and wrapping your "controls" in 
+                            custom objects for additional defaulting logic and unit test coverage potential.
+                        </p>
+                        <a class="demo" href="3.3/solution.html" target="_blank">View Solution</a>
                     </div>
 
                 </div>

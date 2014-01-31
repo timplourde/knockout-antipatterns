@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../lib/jquery-1.10.2.min.js"></script>
+    <script src="../lib/knockout-3.0.0.js"></script>
+    <style>
+        .invalid {
+            border: 1px solid red;
+        }
+        .row {
+            margin-bottom: 20px;
+        }
+        label {
+            display:inline-block;
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+
+ 
+    <div id="app" >
+
+       <div class="row">
+           <label for="streetAddress">Street Address</label>
+           <input id="txt-streetAddress" name="streetAddress" type="text" data-bind="value: streetAddress, valueUpdate: 'keyup',
+                                            css: {invalid: !streetAddressIsValid()},
+                                            attr: {title: streetAddressTooltip, 
+                                                placeholder: streetAddressPlaceholder,
+                                                tabIndex: streetAddressTabIndex}" />
+           <span data-bind="visible: streetAddressIsRequired"> (required)</span>
+       </div>
+      
+        <div class="row">
+            <label for="city">City</label>
+            <input id="txt-city"   name="city" type="text" data-bind="value: city, valueUpdate: 'keyup',
+                                            css: {invalid: !cityIsValid()},
+                                            attr: {title: cityTooltip,
+                                                placeholder: cityPlaceholder,
+                                                tabIndex: cityTabIndex}" />
+            <span data-bind="visible: cityIsRequired"> (required)</span>
+        </div>
+
+
+    </div>
+
+    <script>
+        function ViewModel() {
+            var self = this;
+
+            self.streetAddress = ko.observable("123 Elm St");
+            self.streetAddressTooltip = "Must include the street name and house number";
+            self.streetAddressPlaceholder = "e.g. 456 Maple Ave.";
+            self.streetAddressTabIndex = 4;
+            self.streetAddressIsRequired= true;
+            self.streetAddressIsValid= ko.computed(function () {
+                return self.streetAddress().length > 3;
+            });
+
+            self.city = ko.observable("Frederick, MD");
+            self.cityTooltip = "Must include the city name and state";
+            self.cityPlaceholder = "e.g. Austin, TX";
+            self.cityTabIndex = 4;
+            self.cityIsRequired= false;
+            self.cityIsValid= ko.computed(function () {
+                return self.city().length > 5;
+            });
+
+        };
+        $(document).on("ready", function () {
+            var vm = new ViewModel();
+            ko.applyBindings(vm, $("#app")[0]);
+
+        });
+    </script>
+</body>
+
+</html>
