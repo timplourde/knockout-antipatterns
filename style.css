@@ -14,6 +14,7 @@ body {
     font-size: .9em;
     margin: 0 auto;
     max-width: 800px;
+    color: #222;
 }
 h1 {
     text-align:center;
@@ -27,12 +28,14 @@ h1 {
 }
 .hippo img {
     border-radius: 5px;
+    box-shadow: 2px 2px #ccc;
 }
 
 section {
     padding: 20px;
     margin: 20px 0px;
-    background-color: #e6f1f6;
+    background-color: #efefef;
+    box-shadow: 2px 2px #ccc;
     border-radius: 10px;
     border: 1px solid #ccc;
 }
@@ -49,12 +52,12 @@ h2 {
 h3 {
     cursor: pointer;
     color: #fff;
-    background-color: #304ba0;
+    background-color: #7e91ce;
     padding: 5px;
     border-radius: 5px;
 }
-h3:hover {
-    background-color: #5974c8;
+h3:hover,  .anti-pattern.current h3{
+    background-color:  #304ba0;
 }
 
 .anti-pattern {
@@ -69,10 +72,9 @@ h3:hover {
     transition: max-height .2s ease-in;
     
 }
-.anti-pattern-content.current {
+.anti-pattern.current .anti-pattern-content {
     /*display: block;*/
     max-height: 600px;
-
 }
 
 .examples {
