@@ -10,6 +10,7 @@
 
 
 body {
+    background-image: url('brickwall.png');
     font-size: .9em;
     margin: 0 auto;
     max-width: 800px;
