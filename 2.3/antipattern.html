@@ -7,6 +7,8 @@
     <script src="../lib/jquery-1.10.2.min.js"></script>
     <script src="../lib/knockout-3.0.0.js"></script>
     <script src="../lib/authorData.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         .author {
             border-bottom: 1px solid gray;
@@ -14,10 +16,20 @@
 
         .book {
             font-size: 9pt;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+
+
+    <div class="description">
+        <h1>2.3: Too much data-binding in large collections</h1>
+        <h2 class="anti-pattern">Anti-Pattern</h2>
+        <p>
+            We binding mouseover events for every row in the array and logging the book's title to the console. Check out the resulting the memory usage.
+        </p>
+    </div>
 
     <div id="app" data-bind="foreach: authors">
         <div class="author">

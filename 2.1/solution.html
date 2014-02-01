@@ -8,6 +8,8 @@
     <script src="../lib/knockout-3.0.0.js"></script>
     <script src="../lib/knockout.mapping-latest.js"></script>
     <script src="../lib/authorData.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         .author {
             border-bottom: 1px solid gray;
@@ -19,6 +21,14 @@
     </style>
 </head>
 <body>
+
+    <div class="description">
+        <h1>2.1: Making everything observable</h1>
+        <h2 class="solution">Solution</h2>
+        <p>
+            Instead, just only make the necessary objects observable and get significant speed and memory gains.  Check the stopwatch in the console log and the memory utilization.
+        </p>
+    </div>
 
     <div id="app" data-bind="foreach: authors">
         <div class="author">

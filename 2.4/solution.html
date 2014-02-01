@@ -7,11 +7,19 @@
     <script src="../lib/jquery-1.10.2.min.js"></script>
     <script src="../lib/knockout-3.0.0.js"></script>
     <script src="../lib/authorData.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         .author {
             border-bottom: 1px solid gray;
         }
-
+        .author-summary {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .book-count {
+            color: red;
+        }
         .book {
             font-size: 9pt;
         }
@@ -19,14 +27,28 @@
 </head>
 <body>
 
+
+
+    <div class="description">
+        <h1>2.4: Over-evaluating computed's</h1>
+        <h2 class="solution">Solution</h2>
+        <p>
+            Just add the <span class="code">.extend({throttle: 500})</span> to debounce the evaluation of the function by 500ms.  Rapidly delete books and notice the function is called much less frequently.
+        </p>
+    </div>
+
     <div id="app" data-bind="foreach: authors">
 
         <div class="author">
 
-            <span data-bind="text: name"></span>
-            has
-            <span data-bind="text: numBooks"></span>
-            books with more than 50 pages
+            <div class="author-summary">
+
+                <span data-bind="text: name"></span>
+                has
+                <span class="book-count" data-bind="text: numBooks"></span>
+                books with more than 50 pages
+
+            </div>
 
             <!-- ko foreach: books -->
 
@@ -39,8 +61,8 @@
             <!-- /ko -->
 
 
-        </div>
-
+            </div>
+    </div>
         <script>
 
             function Author(authorData) {

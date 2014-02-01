@@ -6,6 +6,8 @@
     <title></title>
     <script src="../lib/jquery-1.10.2.min.js"></script>
     <script src="../lib/knockout-3.0.0.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         #warning {
             display: none;
@@ -13,6 +15,14 @@
     </style>
 </head>
 <body>
+
+    <div class="description">
+        <h1>1.1 DOM Manipulation in Knockout ViewModels</h1>
+        <h2 class="anti-pattern">Anti-Pattern</h2>
+        <p>
+            In this example, we want to fade in / out a message on the last name field when the first name field changes. We decided to use <span class="code">.subscribe()</span> and jQuery.
+        </p>
+    </div>
 
     <div id="app">
         <p>

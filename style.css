@@ -15,6 +15,7 @@ body {
     margin: 0 auto;
     max-width: 800px;
     color: #222;
+    line-height: 1.4em;
 }
 h1 {
     text-align:center;
@@ -34,13 +35,14 @@ h1 {
 section {
     padding: 20px;
     margin: 20px 0px;
-    background-color: #efefef;
+    background-color: #fff;
     box-shadow: 2px 2px #ccc;
     border-radius: 10px;
     border: 1px solid #ccc;
 }
 
 h2 {
+    
     font-size: 2em;
     margin-top: 0px;
     color: #304ba0;
@@ -50,11 +52,13 @@ h2 {
 }
 
 h3 {
+    font-weight: normal;
     cursor: pointer;
     color: #fff;
     background-color: #7e91ce;
     padding: 5px;
     border-radius: 5px;
+    box-shadow: 2px 2px #ccc;
 }
 h3:hover,  .anti-pattern.current h3{
     background-color:  #304ba0;
@@ -79,46 +83,38 @@ h3:hover,  .anti-pattern.current h3{
 
 .examples {
   padding: 20px;
+  margin: 0 auto;
+  width: 400px;
 }
 
-.example {
-    border: 1px solid #ccc;
-    background-color: white;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-.example:last-child {
-    margin-bottom: 0px;
-}
-.example p {
-    margin:0px;
-    padding: 10px;
-}
-.example a.demo {
+.examples a {
+    box-shadow: 2px 2px #ccc;
+    font-weight: bold;
+    display: inline-block;
+    padding: 1em;
     text-decoration: none;
     color: #fff;
-    display: block;
     text-align: center;
-    padding: 5px;
-    border-radius: 0px 0px 10px 10px;
+    padding: 2em;
+    border-radius: 2px;
     background-color: #666;
 }
-.example a.demo:visited, .example a.demo:hover {
+.examples a.bad {
+    float: left;
+    background-color: #ff7474;
+}
+.examples a.good {
+    float: right;
+    background-color: #338a33;
+}
+.examples a.demo:visited, .examples a.demo:hover {
     color: #fff;
 }
 
-.example.bad a.demo:hover {
-    background-color: #ff7474;
+.examples a.bad:hover {
+    background-color: #fb4b4b;
 }
 
-.example.good a.demo:hover {
-    background-color: #338a33;
-}
-
-.code {
-    font-weight: bold;
-    background-color: #eee;
-    padding: 2px;
-    border: 1px dotted #CCC;
-    font-family: 'Courier New',Courier,'Nimbus Mono L',monospace;
+.examples a.good:hover {
+    background-color: #16b316;
 }

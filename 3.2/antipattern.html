@@ -6,17 +6,31 @@
     <title></title>
     <script src="../lib/jquery-1.10.2.min.js"></script>
     <script src="../lib/knockout-3.0.0.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         .athlete {
             border-bottom: 1px solid black;
             margin-top: 2em;
             padding: 2em;
         }
+        .athlete > div {
+            margin-bottom: 1.3em;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Olympic Athletes</h1>
+
+    <div class="description">
+        <h1>3.2: Too much logic in HTML comments</h1>
+        <h2 class="anti-pattern">Anti-Pattern</h2>
+        <p>
+            A polymorphic collection of objects resulting in a mess of conditional logic in HTML.
+        </p>
+    </div>
+
+    
 
     <div id="app" data-bind="foreach: athletes">
 

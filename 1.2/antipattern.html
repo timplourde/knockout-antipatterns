@@ -6,6 +6,8 @@
     <title></title>
     <script src="../lib/jquery-1.10.2.min.js"></script>
     <script src="../lib/knockout-3.0.0.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         .icon-user-male {
             background-color: lightblue;
@@ -19,6 +21,14 @@
     </style>
 </head>
 <body>
+
+    <div class="description">
+        <h1>1.2: (Non-semantic) CSS in ViewModels</h1>
+        <h2 class="anti-pattern">Anti-Pattern</h2>
+        <p>
+            In this example, we want use CSS to set the color of the first name text box if we know the gender.  We did this using the default CSS binding handler, binding to a computed in the ViewModel.
+        </p>
+    </div>
 
     <div id="app">
         <p>

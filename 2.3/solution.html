@@ -8,6 +8,8 @@
     <script src="../lib/knockout-3.0.0.js"></script>
     <script src="../lib/authorData.js"></script>
     <script src="../lib/knockout-delegatedEvents.min.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         .author {
             border-bottom: 1px solid gray;
@@ -15,10 +17,20 @@
 
         .book {
             font-size: 9pt;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+
+
+    <div class="description">
+        <h1>2.3: Too much data-binding in large collections</h1>
+        <h2 class="solution">Solution</h2>
+        <p>
+            Instead, use the <a href="https://github.com/rniemeyer/knockout-delegatedEvents">knockout-delegatedEvents</a> plugin to leverage DOM event bubbling and see an improvement in memory usage.
+        </p>
+    </div>
 
     <div id="app" data-bind="foreach: authors">
         <div class="author">

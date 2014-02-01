@@ -6,6 +6,8 @@
     <title></title>
     <script src="../lib/jquery-1.10.2.min.js"></script>
     <script src="../lib/knockout-3.0.0.js"></script>
+    <link href="../normalize.css" rel="stylesheet" />
+    <link href="../example.css" rel="stylesheet" />
     <style>
         .icon-user-male {
             background-color: lightblue;
@@ -21,6 +23,14 @@
     </style>
 </head>
 <body>
+
+    <div class="description">
+        <h1>1.2: (Non-semantic) CSS in ViewModels</h1>
+        <h2 class="solution">Solution</h2>
+        <p>
+            Since the computed was returning view-specific non-semantic CSS class names, we moved it to a custom binding handler.  It would be even simpler if you could rename the CSS class names to something more semantic like "male" and "female" and just bind directly to it without the need fo the binding handler to do the translation.
+        </p>
+    </div>
 
     <div id="app">
         <p>
