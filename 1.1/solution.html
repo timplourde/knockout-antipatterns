@@ -41,15 +41,16 @@
         // SOLUTION: encapsulate all DOM-related code in knockout binding handlers
         ko.bindingHandlers.fadeInOutOnChangeOf = {
             update: function (element, valueAccessor) {
+                var $element = $(element);
                 ko.unwrap(valueAccessor());
                 // update() always fires when it's first bound, which we don't want in this case
-                if (element.__fadeInOutRanOnce__) {
-                    $("#warning").fadeIn();
+                if ($element.data("fadeInOutRanOnce")) {
+                    $element.fadeIn();
                     setTimeout(function () {
-                        $("#warning").fadeOut();
+                        $element.fadeOut();
                     }, 1000);
                 }
-                element.__fadeInOutRanOnce__ = true;
+                $element.data("fadeInOutRanOnce", true);
             }
         };
 
