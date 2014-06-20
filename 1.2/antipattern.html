@@ -9,13 +9,13 @@
     <link href="../normalize.css" rel="stylesheet" />
     <link href="../example.css" rel="stylesheet" />
     <style>
-        .icon-user-male {
+        .snazzy-icon-user-male {
             background-color: lightblue;
         }
-       .icon-user-female {
+       .snazzy-icon-user-female {
             background-color: pink;
         }
-        .icon-user-default {
+        .snazzy-icon-user-default {
             background-color: lightgray;
         }
     </style>
@@ -49,12 +49,12 @@
             // this computed returns CSS class names which have no domain/semantic meaning
             self.cssClass = ko.computed(function () {
                 if ($.inArray(self.name().toLowerCase(), maleNames) >= 0) {
-                    return "icon-user-male";
+                    return "snazzy-icon-user-male";
                 }
                 if ($.inArray(self.name().toLowerCase(), femaleNames) >= 0) {
-                    return "icon-user-female";
+                    return "snazzy-icon-user-female";
                 }
-                return "icon-user-default";
+                return "snazzy-icon-user-default";
             });
         }
 

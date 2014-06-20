@@ -9,15 +9,15 @@
     <link href="../normalize.css" rel="stylesheet" />
     <link href="../example.css" rel="stylesheet" />
     <style>
-        .icon-user-male {
+        .snazzy-icon-user-male {
             background-color: lightblue;
         }
 
-        .icon-user-female {
+        .snazzy-icon-user-female {
             background-color: pink;
         }
 
-        .icon-user-default {
+        .snazzy-icon-user-default {
             background-color: lightgray;
         }
     </style>
@@ -50,9 +50,9 @@
                 var currentGender = ko.unwrap(valueAccessor()),
                     $el = $(element),
                     cssClasses = {
-                        "male": "icon-user-male",
-                        "female": "icon-user-female",
-                        "unknown": "icon-user-default"
+                        "male": "snazzy-icon-user-male",
+                        "female": "snazzy-icon-user-female",
+                        "unknown": "snazzy-icon-user-default"
                     };
 
                 $.each(cssClasses, function (key, value) {
