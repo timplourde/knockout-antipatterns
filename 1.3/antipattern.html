@@ -15,24 +15,36 @@
         <h1>1.3: calling ko.applyBindings() inside ViewModel code</h1>
         <h2 class="anti-pattern">Anti-Pattern</h2>
         <p>
-            This ViewModel has a <span class="code">ko.applyBindings()</span> call inside it.  This means the ViewModel is directly interacting with the View (DOM).  It also means every time you construct a ViewModel, it will re-bind, potentially resulting in errors or extra event handlers.
+            The ViewModels have a <span class="code">ko.applyBindings()</span> call inside it.  This means each ViewModel is directly interacting with the View (DOM).  It also means every time you construct a ViewModel, it will re-bind, potentially resulting in errors or collisions.  You will also want HTML in your ViewModel unit tests.
         </p>
     </div>
 
     <div id="app">
-        <p>
-            <input type="text" data-bind="value: name" /> 
+        <p class="a">
+            name: <input type="text" data-bind="value: name" /> 
+        </p>
+        <p class="b">
+            age: <input type="text" data-bind="value: age" />
         </p>
     </div>
     <script>
-        function ViewModel() {
+        function ViewModelA() {
             this.name = ko.observable("Joe");
 
             // this directly impacts the DOM
-            ko.applyBindings(this);       
+            ko.applyBindings(this, $(".a").get(0));       
         }
+
+        function ViewModelB() {
+            this.age = ko.observable(25);
+
+            // this directly impacts the DOM
+            ko.applyBindings(this, $(".b").get(0));
+        }
+
         $(document).on("ready", function () {
-            var vm = new ViewModel();
+            var a = new ViewModelA();
+            var b = new ViewModelB();
         });
     </script>
 </body>

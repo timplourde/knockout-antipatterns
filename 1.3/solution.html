@@ -22,18 +22,27 @@
 
     <div id="app">
         <p>
-            <input type="text" data-bind="value: name" />
+            <input type="text" data-bind="value: a.name" />
+        </p>
+        <p>
+            age: <input type="text" data-bind="value: b.age" />
         </p>
     </div>
 
 
     <script>
-        function ViewModel() {
+        function ViewModelA() {
             this.name = ko.observable("Joe");
+        }
+        function ViewModelB() {
+            this.age = ko.observable(25);
         }
         $(document).on("ready", function () {
             // this is the "bootstrapper"
-            ko.applyBindings(new ViewModel(), $("#app")[0]);
+            ko.applyBindings({
+                a: new ViewModelA(),
+                b: new ViewModelB()
+            }, $("#app")[0]);
         });
     </script>
 
